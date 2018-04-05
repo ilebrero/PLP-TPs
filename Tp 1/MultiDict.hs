@@ -82,9 +82,22 @@ lowerString = map toLower
 enLexicon :: [String] -> MultiDict String b -> MultiDict String b
 enLexicon xs md= filterMD (\x -> elem x xs) (mapMD lowerString id md)
 
+-- Arma una cadena de entradas en el diccionario con el valor passado ocmo parametro al final.
+-- Obs: Notar que posicion nunca es 0 ya que cae en el caso base del foldr.
 cadena :: Eq a => b ->  [a] -> MultiDict a b
-cadena = undefined
+cadena valor claves = foldr (
+    \clave rec -> (
+      \posicion ->
+        if posicion == 1 
+          then Entry clave valor Nil 
+          else Multi clave ( rec(posicion - 1) ) Nil
+      )
+    ) 
+    (const Nil) 
+    claves 
+    (length claves)
 
+ 
 --Agrega a un multidiccionario una cadena de claves [c1, ..., cn], una por cada nivel,
 --donde el valor asociado a cada clave es un multidiccionario con la clave siguiente, y así sucesivamente hasta
 --llegar a la última clave de la lista, cuyo valor es el dato de tipo b pasado como parámetro.
@@ -96,4 +109,3 @@ definir (x:xs) v d = (recMD (\ks -> cadena v ks)
 
 obtener :: Eq a => [a] -> MultiDict a b -> Maybe b
 obtener = undefined
-
