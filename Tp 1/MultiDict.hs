@@ -83,7 +83,9 @@ enLexicon :: [String] -> MultiDict String b -> MultiDict String b
 enLexicon xs md= filterMD (\x -> elem x xs) (mapMD lowerString id md)
 
 cadena :: Eq a => b ->  [a] -> MultiDict a b
-cadena = undefined
+cadena param xs = foldr (\x rec-> case rec of
+                                  Nil -> Entry x param Nil
+                                  _ -> Multi x rec Nil) Nil xs
 
 --Agrega a un multidiccionario una cadena de claves [c1, ..., cn], una por cada nivel,
 --donde el valor asociado a cada clave es un multidiccionario con la clave siguiente, y así sucesivamente hasta
