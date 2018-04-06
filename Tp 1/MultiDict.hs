@@ -68,7 +68,7 @@ armarTabla :: Integer ->  Integer -> MultiDict Integer Integer
 armarTabla n j = Entry j (n*j) $ armarTabla n (j+1)
 
 serialize :: (Show a, Show b) => MultiDict a b -> String
-serialize = foldMD "[]" (\k v r -> "[" ++ (show k) ++ ":" ++ (show v) ++ ", " ++ r ++ "]") (\k r1 r2 -> "[" ++ (show k) ++ ":" ++ r1 ++ ", " ++ r2 ++ "]")
+serialize = foldMD "[ ]" (\k v r -> "[" ++ (show k) ++ ": " ++ (show v) ++ ", " ++ r ++ "]") (\k r1 r2 -> "[" ++ (show k) ++ ": " ++ r1 ++ ", " ++ r2 ++ "]")
 
 mapMD :: (a->c) -> (b->d) -> MultiDict a b -> MultiDict c d
 mapMD f g = foldMD Nil (\k v r -> Entry (f k) (g v) r) (\k r1 r2 -> Multi (f k) r1 r2)
@@ -83,9 +83,14 @@ enLexicon :: [String] -> MultiDict String b -> MultiDict String b
 enLexicon xs md= filterMD (\x -> elem x xs) (mapMD lowerString id md)
 
 cadena :: Eq a => b ->  [a] -> MultiDict a b
+cadena param xs = foldr (\x rec-> case rec of
+                                  Nil -> Entry x param Nil
+                                  _ -> Multi x rec Nil) Nil xs
+
 -- Obs: Notar que posicion nunca es 0 ya que cae en el caso base del foldr.
 -- TODO: preguntar
-{-cadena valor claves = foldr (
+cadena2 :: Eq a => b ->  [a] -> MultiDict a b
+cadena2 valor claves = foldr (
     \clave rec -> (
       \posicion ->
         if posicion == 1 
@@ -96,10 +101,7 @@ cadena :: Eq a => b ->  [a] -> MultiDict a b
     (const Nil) 
     claves 
     (length claves)
--}
-cadena param xs = foldr (\x rec-> case rec of
-                                  Nil -> Entry x param Nil
-                                  _ -> Multi x rec Nil) Nil xs
+
 
 --Agrega a un multidiccionario una cadena de claves [c1, ..., cn], una por cada nivel,
 --donde el valor asociado a cada clave es un multidiccionario con la clave siguiente, y así sucesivamente hasta
