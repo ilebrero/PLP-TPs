@@ -111,4 +111,38 @@ definir (x:xs) v d = (recMD (\ks -> cadena v ks)
   where armarDic ks k resto interior = if null ks then Entry k v resto else Multi k interior resto
 
 obtener :: Eq a => [a] -> MultiDict a b -> Maybe b
-obtener = undefined
+obtener claves dicc = foldMD 
+  
+  -- Para el caso base no hay nada que devolver, el dicc esta vacio
+  (const Nothing)
+
+  -- entry k v dicc
+  -- Si la clave es la ultima entrada que buscamos, va ese valor 
+  -- Sino seguimos buscando este nivel del dicc. (no consume entradas de la cadena)
+  (\clave valor rec1 -> 
+    (\cadena ->
+      if ((length cadena) == 0)
+        then Nothing
+        else if (head cadena) == clave
+          then if (length cadena == 1)
+            then (Just valor)
+            else Nothing
+          else rec1 cadena
+    )
+  )
+
+  -- Multi k dicc1 dicc2
+  -- Si hay que navegar al proximo nivel de dicc consumimos de la cadena
+  -- sino seguimos navegando este nivel
+  (\clave rec1 rec2 -> 
+    (\cadena ->
+      if (length cadena) == 0
+        then Nothing
+        else if (head cadena) == clave 
+          then rec1 (tail cadena)
+          else rec2 (cadena)
+    )
+  )
+
+  dicc
+  claves
