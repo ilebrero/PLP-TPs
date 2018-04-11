@@ -105,16 +105,15 @@ obtener claves dicc = foldMD
   -- entry k v dicc
   -- Si la clave es la ultima entrada que buscamos, va ese valor 
   -- Sino seguimos buscando este nivel del dicc. (no consume entradas de la cadena)
-  -- Hacer pattern matching en cadena
   (\clave valor rec1 -> 
     (\cadena ->
-      if ((length cadena) == 0)
-        then Nothing
-        else if (head cadena) == clave
-          then if (length cadena == 1)
-            then (Just valor)
-            else Nothing
-          else rec1 cadena
+      case length cadena of
+        0 -> Nothing
+        _ -> if (head cadena) == clave
+              then if (length cadena == 1)
+                then (Just valor)
+                else Nothing
+              else rec1 cadena
     )
   )
 
@@ -123,11 +122,11 @@ obtener claves dicc = foldMD
   -- sino seguimos navegando este nivel
   (\clave rec1 rec2 -> 
     (\cadena ->
-      if (length cadena) == 0
-        then Nothing
-        else if (head cadena) == clave 
-          then rec1 (tail cadena)
-          else rec2 (cadena)
+      case length cadena of
+        0 -> Nothing
+        _ -> if (head cadena) == clave 
+              then rec1 (tail cadena)
+              else rec2 (cadena)
     )
   )
 
