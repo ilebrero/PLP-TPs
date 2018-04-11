@@ -61,6 +61,7 @@ podar long prof m = podarHasta m long prof long
 
 --Dado un entero n, define las claves de n en adelante, cada una con su tabla de multiplicar.
 --Es decir, el valor asociado a la clave i es un diccionario con las claves de 1 en adelante, donde el valor de la clave j es i*j.
+-- Caso 0? queda por definicion un tabla infinita con entrada 0
 tablas :: Integer -> MultiDict Integer Integer
 tablas n = Multi n (armarTabla n 1) (tablas (n + 1))
 

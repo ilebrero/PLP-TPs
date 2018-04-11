@@ -1,4 +1,5 @@
 import Data.Maybe
+import Data.Char
 import Test.HUnit
 import MultiDict
 
@@ -136,17 +137,23 @@ tests2 = test [
   ]
 
 tests3 = test [
-   profundidad cuatroNiveles ~=? 4,
-   profundidad datosLlamada ~=? 2
+   profundidad (Nil) ~=? 0,
+   profundidad (Entry 'a' 0 Nil) ~=? 1,
+   profundidad datosLlamada  ~=? 2,
+   profundidad cuatroNiveles ~=? 4
   ]
 
 tests4 = test [
+   tamaño Nil ~=? 0,
+   tamaño (Entry 'a' 0 Nil) ~=? 1,
+   tamaño (Entry 'a' 0 (Entry 'b' 1 Nil)) ~=? 2,
    tamaño cuatroNiveles ~=? 7,
    (tamaño $ podar 5 3 datosLlamada) ~=? 10,
    tamaño datosLlamada ~=? 89
   ]
 
 tests5 = test [
+   profundidad (podar 5 3 $ tablas 0) ~=? 2,
    (podar 5 3 $ tablas 2) ~=? (podar 5 2 $ tablas 2),
    (profundidad $ podar 20 20 infinito) ~=? 2,
    (tamaño $ podar 5 3 $ tablas 2) ~=? 30
@@ -157,12 +164,15 @@ tests6 = test [
   ]
 
 tests7 = test [
+   (serialize (mapMD (id) (ord) cuatroNiveles)) ~=? "[1: 97, [2: [2: 98, [3: [3: 99, [4: [4: 100, [ ]], [ ]]], [ ]]], [ ]]]",
    (profundidad $ podar 10 5 superinfinito) ~=? 5,
    (profundidad $ podar 3 10 superinfinito) ~=? 10,
    (tamaño $ podar 10 5 superinfinito) ~=? 82010
   ]
 
 tests8 = test [
+   -- (serialize $ Nil) ~=? "[ ]", <- Nil no tiene los typos que van como params, ver como arreglarlo
+   (serialize $ Entry 'a' 1 Nil) ~=? "['a': 1, [ ]]",
    (serialize $ filterMD even $ Entry 4 'e' cuatroNiveles) ~=? "[4: 'e', [2: [2: 'b', [ ]], [ ]]]",
    (serialize $ enLexicon ["extensions", "originationdn", "no_answer_action", "ani", "dnis", "userdata", "customersegment", "statusafterinbound", "connid"] datosLlamada) ~=? "[\"extensions\": [\"originationdn\": \"3584622309\", [\"no_answer_action\": \"notready\", [ ]]], [\"ani\": \"3584622309\", [\"dnis\": \"1665\", [\"userdata\": [\"customersegment\": \"default\", [\"ani\": \"3584622309\", [\"statusafterinbound\": \"Amarillo\", [ ]]]], [\"connid\": \"000202BA29A61AD6\", [ ]]]]]]"
   ]
