@@ -115,54 +115,63 @@ main :: IO Counts
 main = do runTestTT allTests
 
 allTests = test [
-  "ejercicio1a" ~: tests2,
+  "ejercicio1a" ~: tests1,
   "ejercicio1b" ~: tests2,
   "ejercicio2a" ~: tests3,
   "ejercicio2b" ~: tests4,
-  "ejercicio3" ~: tests5,
-  "ejercicio4" ~: tests6,
+  "ejercicio3"  ~: tests5,
+  "ejercicio4"  ~: tests6,
   "ejercicio5a" ~: tests7,
   "ejercicio5b" ~: tests8,
-  "ejercicio6" ~: tests9,
-  "ejercicio7" ~: tests10
+  "ejercicio6"  ~: tests9,
+  "ejercicio7"  ~: tests10
   ]
 
 tests1 = test [
    podar 5 5 cuatroNiveles ~=? cuatroNiveles
   ]
+
 tests2 = test [
    recMD 0 (\_ _ _ ->id) (\_ m1 _ r1 r2->if isNil m1 then r2 else 1+r1+r2) cuatroNiveles ~=? 3
   ]
+
 tests3 = test [
    profundidad cuatroNiveles ~=? 4,
    profundidad datosLlamada ~=? 2
   ]
+
 tests4 = test [
    tamaño cuatroNiveles ~=? 7,
    (tamaño $ podar 5 3 datosLlamada) ~=? 10,
    tamaño datosLlamada ~=? 89
   ]
+
 tests5 = test [
    (podar 5 3 $ tablas 2) ~=? (podar 5 2 $ tablas 2),
    (profundidad $ podar 20 20 infinito) ~=? 2,
    (tamaño $ podar 5 3 $ tablas 2) ~=? 30
   ]
+
 tests6 = test [
   serialize cuatroNiveles ~=? "[1: 'a', [2: [2: 'b', [3: [3: 'c', [4: [4: 'd', [ ]], [ ]]], [ ]]], [ ]]]"
   ]
+
 tests7 = test [
    (profundidad $ podar 10 5 superinfinito) ~=? 5,
    (profundidad $ podar 3 10 superinfinito) ~=? 10,
    (tamaño $ podar 10 5 superinfinito) ~=? 82010
   ]
+
 tests8 = test [
    (serialize $ filterMD even $ Entry 4 'e' cuatroNiveles) ~=? "[4: 'e', [2: [2: 'b', [ ]], [ ]]]",
    (serialize $ enLexicon ["extensions", "originationdn", "no_answer_action", "ani", "dnis", "userdata", "customersegment", "statusafterinbound", "connid"] datosLlamada) ~=? "[\"extensions\": [\"originationdn\": \"3584622309\", [\"no_answer_action\": \"notready\", [ ]]], [\"ani\": \"3584622309\", [\"dnis\": \"1665\", [\"userdata\": [\"customersegment\": \"default\", [\"ani\": \"3584622309\", [\"statusafterinbound\": \"Amarillo\", [ ]]]], [\"connid\": \"000202BA29A61AD6\", [ ]]]]]]"
   ]
+
 tests9 = test [
    (serialize $ definir [2,3] 'c' cuatroNiveles) ~=? "[1: 'a', [2: [2: 'b', [3: 'c', [ ]]], [ ]]]",
    (profundidad $ definir [4] 'g' $ definir [4] 'e' $ definir [2,4] 'f' $ definir [2,3,4,5] 'e' cuatroNiveles) ~=? 4
   ]
+
 tests10 = test [
    (obtener [4] $ definir [4] 'g' $ definir [4] 'e' $ definir [2,4] 'f' $ definir [2,3,4,5] 'e' cuatroNiveles) ~=? Just 'g',
    obtener [2,3,3] cuatroNiveles ~=? Just 'c',

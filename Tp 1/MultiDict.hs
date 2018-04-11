@@ -87,22 +87,6 @@ cadena param xs = foldr (\x rec-> case rec of
                                   Nil -> Entry x param Nil
                                   _ -> Multi x rec Nil) Nil xs
 
--- Obs: Notar que posicion nunca es 0 ya que cae en el caso base del foldr.
--- TODO: preguntar
-cadena2 :: Eq a => b ->  [a] -> MultiDict a b
-cadena2 valor claves = foldr (
-    \clave rec -> (
-      \posicion ->
-        if posicion == 1 
-          then Entry clave valor Nil 
-          else Multi clave ( rec(posicion - 1) ) Nil
-      )
-    ) 
-    (const Nil) 
-    claves 
-    (length claves)
-
-
 --Agrega a un multidiccionario una cadena de claves [c1, ..., cn], una por cada nivel,
 --donde el valor asociado a cada clave es un multidiccionario con la clave siguiente, y así sucesivamente hasta
 --llegar a la última clave de la lista, cuyo valor es el dato de tipo b pasado como parámetro.
@@ -121,6 +105,7 @@ obtener claves dicc = foldMD
   -- entry k v dicc
   -- Si la clave es la ultima entrada que buscamos, va ese valor 
   -- Sino seguimos buscando este nivel del dicc. (no consume entradas de la cadena)
+  -- Hacer pattern matching en cadena
   (\clave valor rec1 -> 
     (\cadena ->
       if ((length cadena) == 0)
