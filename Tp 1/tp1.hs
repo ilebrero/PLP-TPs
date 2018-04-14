@@ -129,62 +129,67 @@ allTests = test [
   ]
 
 tests1 = test [
-   podar 5 5 cuatroNiveles ~=? cuatroNiveles
+   podar 5 5 cuatroNiveles ~?= cuatroNiveles
   ]
 
 tests2 = test [
-   recMD 0 (\_ _ _ ->id) (\_ m1 _ r1 r2->if isNil m1 then r2 else 1+r1+r2) cuatroNiveles ~=? 3
+   recMD 0 (\_ _ _ ->id) (\_ m1 _ r1 r2->if isNil m1 then r2 else 1+r1+r2) cuatroNiveles ~?= 3
   ]
 
 tests3 = test [
-   profundidad (Nil) ~=? 0,
-   profundidad (Entry 'a' 0 Nil) ~=? 1,
-   profundidad datosLlamada  ~=? 2,
-   profundidad cuatroNiveles ~=? 4
+   profundidad (Nil) ~?= 0,
+   profundidad (Entry 'a' 0 Nil) ~?= 1,
+   profundidad datosLlamada  ~?= 2,
+   profundidad cuatroNiveles ~?= 4
   ]
 
 tests4 = test [
-   tamaño Nil ~=? 0,
-   tamaño (Entry 'a' 0 Nil) ~=? 1,
-   tamaño (Entry 'a' 0 (Entry 'b' 1 Nil)) ~=? 2,
-   tamaño cuatroNiveles ~=? 7,
-   (tamaño $ podar 5 3 datosLlamada) ~=? 10,
-   tamaño datosLlamada ~=? 89
+   tamaño Nil ~?= 0,
+   tamaño (Entry 'a' 0 Nil) ~?= 1,
+   tamaño (Entry 'a' 0 (Entry 'b' 1 Nil)) ~?= 2,
+   tamaño cuatroNiveles ~?= 7,
+   (tamaño $ podar 5 3 datosLlamada) ~?= 10,
+   tamaño datosLlamada ~?= 89
   ]
 
 tests5 = test [
-   profundidad (podar 5 3 $ tablas 0) ~=? 2,
-   (podar 5 3 $ tablas 2) ~=? (podar 5 2 $ tablas 2),
-   (profundidad $ podar 20 20 infinito) ~=? 2,
-   (tamaño $ podar 5 3 $ tablas 2) ~=? 30
+   profundidad (podar 5 3 $ tablas 0) ~?= 2,
+   (podar 5 3 $ tablas 2) ~?= (podar 5 2 $ tablas 2),
+   (profundidad $ podar 20 20 infinito) ~?= 2,
+   (tamaño $ podar 5 3 $ tablas 2) ~?= 30
   ]
 
 tests6 = test [
-  serialize cuatroNiveles ~=? "[1: 'a', [2: [2: 'b', [3: [3: 'c', [4: [4: 'd', [ ]], [ ]]], [ ]]], [ ]]]"
+  serialize cuatroNiveles ~?= "[1: 'a', [2: [2: 'b', [3: [3: 'c', [4: [4: 'd', [ ]], [ ]]], [ ]]], [ ]]]"
   ]
 
 tests7 = test [
-   (serialize (mapMD (id) (ord) cuatroNiveles)) ~=? "[1: 97, [2: [2: 98, [3: [3: 99, [4: [4: 100, [ ]], [ ]]], [ ]]], [ ]]]",
-   (profundidad $ podar 10 5 superinfinito) ~=? 5,
-   (profundidad $ podar 3 10 superinfinito) ~=? 10,
-   (tamaño $ podar 10 5 superinfinito) ~=? 82010
+   (serialize (mapMD (id) (ord) cuatroNiveles)) ~?= "[1: 97, [2: [2: 98, [3: [3: 99, [4: [4: 100, [ ]], [ ]]], [ ]]], [ ]]]",
+   (profundidad $ podar 10 5 superinfinito) ~?= 5,
+   (profundidad $ podar 3 10 superinfinito) ~?= 10,
+   (tamaño $ podar 10 5 superinfinito) ~?= 82010
   ]
 
 tests8 = test [
-   -- (serialize $ Nil) ~=? "[ ]", <- Nil no tiene los typos que van como params, ver como arreglarlo
-   (serialize $ Entry 'a' 1 Nil) ~=? "['a': 1, [ ]]",
-   (serialize $ filterMD even $ Entry 4 'e' cuatroNiveles) ~=? "[4: 'e', [2: [2: 'b', [ ]], [ ]]]",
-   (serialize $ enLexicon ["extensions", "originationdn", "no_answer_action", "ani", "dnis", "userdata", "customersegment", "statusafterinbound", "connid"] datosLlamada) ~=? "[\"extensions\": [\"originationdn\": \"3584622309\", [\"no_answer_action\": \"notready\", [ ]]], [\"ani\": \"3584622309\", [\"dnis\": \"1665\", [\"userdata\": [\"customersegment\": \"default\", [\"ani\": \"3584622309\", [\"statusafterinbound\": \"Amarillo\", [ ]]]], [\"connid\": \"000202BA29A61AD6\", [ ]]]]]]"
+   -- (serialize $ x) ~?= "[ ]", -- <- No machea el typo con Nil?
+   (serialize $ Entry 'a' 1 Nil) ~?= "['a': 1, [ ]]",
+   (serialize $ filterMD even $ Entry 4 'e' cuatroNiveles) ~?= "[4: 'e', [2: [2: 'b', [ ]], [ ]]]",
+   (serialize $ enLexicon ["extensions", "originationdn", "no_answer_action", "ani", "dnis", "userdata", "customersegment", "statusafterinbound", "connid"] datosLlamada) ~?= "[\"extensions\": [\"originationdn\": \"3584622309\", [\"no_answer_action\": \"notready\", [ ]]], [\"ani\": \"3584622309\", [\"dnis\": \"1665\", [\"userdata\": [\"customersegment\": \"default\", [\"ani\": \"3584622309\", [\"statusafterinbound\": \"Amarillo\", [ ]]]], [\"connid\": \"000202BA29A61AD6\", [ ]]]]]]"
   ]
 
 tests9 = test [
-   (serialize $ definir [2,3] 'c' cuatroNiveles) ~=? "[1: 'a', [2: [2: 'b', [3: 'c', [ ]]], [ ]]]",
-   (profundidad $ definir [4] 'g' $ definir [4] 'e' $ definir [2,4] 'f' $ definir [2,3,4,5] 'e' cuatroNiveles) ~=? 4
+   -- (serialize $ cadena 1 []) -- Idem problema de cadena vacia con tipos
+   (serialize $ cadena 1 [1]) ~?= "[1: 1, [ ]]",
+   (serialize $ cadena 1 ['1', '2', '3', '4']) ~?= "['1': ['2': ['3': ['4': 1, [ ]], [ ]], [ ]], [ ]]",
+
+   (serialize $ definir [2,3] 'c' cuatroNiveles) ~?= "[1: 'a', [2: [2: 'b', [3: 'c', [ ]]], [ ]]]",
+   (profundidad $ definir [4] 'g' $ definir [4] 'e' $ definir [2,4] 'f' $ definir [2,3,4,5] 'e' cuatroNiveles) ~?= 4
   ]
 
 tests10 = test [
-   (obtener [4] $ definir [4] 'g' $ definir [4] 'e' $ definir [2,4] 'f' $ definir [2,3,4,5] 'e' cuatroNiveles) ~=? Just 'g',
-   obtener [2,3,3] cuatroNiveles ~=? Just 'c',
-   obtener [2,3,5] cuatroNiveles ~=? Nothing,
-   obtener [6,7] infinito ~=? Just 42
+   -- obtener [] Nil -- Idem no matchean tipos  
+   (obtener [4] $ definir [4] 'g' $ definir [4] 'e' $ definir [2,4] 'f' $ definir [2,3,4,5] 'e' cuatroNiveles) ~?= Just 'g',
+   obtener [2,3,3] cuatroNiveles ~?= Just 'c',
+   obtener [2,3,5] cuatroNiveles ~?= Nothing,
+   obtener [6,7] infinito ~?= Just 42
   ]
