@@ -81,7 +81,7 @@ filterMD p = foldMD Nil (\k v r -> if p k then Entry k v r else r) (\k r1 r2 -> 
 lowerString = map toLower
 
 enLexicon :: [String] -> MultiDict String b -> MultiDict String b
-enLexicon xs md= filterMD (\x -> elem x xs) (mapMD lowerString id md)
+enLexicon xs md = filterMD (\x -> elem x xs) (mapMD lowerString id md)
 
 cadena :: Eq a => b ->  [a] -> MultiDict a b
 cadena param xs = foldr (\x rec-> case rec of

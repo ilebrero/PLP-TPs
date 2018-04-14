@@ -1,6 +1,7 @@
 import Data.Maybe
 import Data.Char
 import Test.HUnit
+import Test.Hspec
 import MultiDict
 
 
@@ -116,80 +117,78 @@ main :: IO Counts
 main = do runTestTT allTests
 
 allTests = test [
-  "ejercicio1a" ~: tests1,
-  "ejercicio1b" ~: tests2,
-  "ejercicio2a" ~: tests3,
-  "ejercicio2b" ~: tests4,
-  "ejercicio3"  ~: tests5,
-  "ejercicio4"  ~: tests6,
-  "ejercicio5a" ~: tests7,
-  "ejercicio5b" ~: tests8,
-  "ejercicio6"  ~: tests9,
-  "ejercicio7"  ~: tests10
+  "ejercicio1a" ~: ejercicio1a,
+  "ejercicio1b" ~: ejercicio1b,
+  "ejercicio2a" ~: ejercicio2a,
+  "ejercicio2b" ~: ejercicio2b,
+  "ejercicio3"  ~: ejercicio3,
+  "ejercicio4"  ~: ejercicio4,
+  "ejercicio5a" ~: ejercicio5a,
+  "ejercicio5b" ~: ejercicio5b,
+  "ejercicio6"  ~: ejercicio6,
+  "ejercicio7"  ~: ejercicio7
   ]
 
-tests1 = test [
+ejercicio1a = test [
    podar 5 5 cuatroNiveles ~?= cuatroNiveles
   ]
 
-tests2 = test [
+ejercicio1b = test [
    recMD 0 (\_ _ _ ->id) (\_ m1 _ r1 r2->if isNil m1 then r2 else 1+r1+r2) cuatroNiveles ~?= 3
   ]
 
-tests3 = test [
-   profundidad (Nil) ~?= 0,
-   profundidad (Entry 'a' 0 Nil) ~?= 1,
-   profundidad datosLlamada  ~?= 2,
-   profundidad cuatroNiveles ~?= 4
+ejercicio2a = test [
+  profundidad (Nil) ~?= 0,
+  profundidad datosLlamada      ~?= 2,
+  profundidad cuatroNiveles     ~?= 4,
+  profundidad (Entry 'a' 0 Nil) ~?= 1,
+  (profundidad $ podar 20 20 infinito) ~?= 2,
+  (profundidad $ podar 10 5 superinfinito) ~?= 5,
+  (profundidad $ podar 3 10 superinfinito) ~?= 10
   ]
 
-tests4 = test [
+ejercicio2b = test [
    tamaño Nil ~?= 0,
+   tamaño datosLlamada      ~?= 89,
+   tamaño cuatroNiveles     ~?= 7,
    tamaño (Entry 'a' 0 Nil) ~?= 1,
-   tamaño (Entry 'a' 0 (Entry 'b' 1 Nil)) ~?= 2,
-   tamaño cuatroNiveles ~?= 7,
-   (tamaño $ podar 5 3 datosLlamada) ~?= 10,
-   tamaño datosLlamada ~?= 89
+   (tamaño $ podar 5 3 datosLlamada)   ~?= 10,
+   (tamaño $ podar 10 5 superinfinito) ~?= 82010,
+   tamaño (Entry 'a' 0 (Entry 'b' 1 Nil)) ~?= 2
   ]
 
-tests5 = test [
-   profundidad (podar 5 3 $ tablas 0) ~?= 2,
-   (podar 5 3 $ tablas 2) ~?= (podar 5 2 $ tablas 2),
-   (profundidad $ podar 20 20 infinito) ~?= 2,
-   (tamaño $ podar 5 3 $ tablas 2) ~?= 30
+ejercicio3 = test [  
+  (podar 5 3 $ tablas 2)             ~?= (podar 5 2 $ tablas 2),
+  (tamaño $ podar 5 3 $ tablas 2)    ~?= 30,   
+  profundidad (podar 5 3 $ tablas 0) ~?= 2
   ]
 
-tests6 = test [
+ejercicio4 = test [
+  (serialize $ Entry 'a' 1 Nil) ~?= "['a': 1, [ ]]",
   serialize cuatroNiveles ~?= "[1: 'a', [2: [2: 'b', [3: [3: 'c', [4: [4: 'd', [ ]], [ ]]], [ ]]], [ ]]]"
   ]
 
-tests7 = test [
-   (serialize (mapMD (id) (ord) cuatroNiveles)) ~?= "[1: 97, [2: [2: 98, [3: [3: 99, [4: [4: 100, [ ]], [ ]]], [ ]]], [ ]]]",
-   (profundidad $ podar 10 5 superinfinito) ~?= 5,
-   (profundidad $ podar 3 10 superinfinito) ~?= 10,
-   (tamaño $ podar 10 5 superinfinito) ~?= 82010
+ejercicio5a = test [
+  serialize (mapMD (id) (ord) cuatroNiveles) ~?= "[1: 97, [2: [2: 98, [3: [3: 99, [4: [4: 100, [ ]], [ ]]], [ ]]], [ ]]]",
+  serialize (mapMD (+ 1) (id) cuatroNiveles) ~?= "[2: 'a', [3: [3: 'b', [4: [4: 'c', [5: [5: 'd', [ ]], [ ]]], [ ]]], [ ]]]"
   ]
 
-tests8 = test [
-   -- (serialize $ x) ~?= "[ ]", -- <- No machea el typo con Nil?
-   (serialize $ Entry 'a' 1 Nil) ~?= "['a': 1, [ ]]",
-   (serialize $ filterMD even $ Entry 4 'e' cuatroNiveles) ~?= "[4: 'e', [2: [2: 'b', [ ]], [ ]]]",
-   (serialize $ enLexicon ["extensions", "originationdn", "no_answer_action", "ani", "dnis", "userdata", "customersegment", "statusafterinbound", "connid"] datosLlamada) ~?= "[\"extensions\": [\"originationdn\": \"3584622309\", [\"no_answer_action\": \"notready\", [ ]]], [\"ani\": \"3584622309\", [\"dnis\": \"1665\", [\"userdata\": [\"customersegment\": \"default\", [\"ani\": \"3584622309\", [\"statusafterinbound\": \"Amarillo\", [ ]]]], [\"connid\": \"000202BA29A61AD6\", [ ]]]]]]"
+ejercicio5b = test [
+  serialize (Nil :: MultiDict () ()) ~?= "[ ]",
+  (serialize $ filterMD even $ Entry 4 'e' cuatroNiveles) ~?= "[4: 'e', [2: [2: 'b', [ ]], [ ]]]",
+  (serialize $ enLexicon ["extensions", "originationdn", "no_answer_action", "ani", "dnis", "userdata", "customersegment", "statusafterinbound", "connid"] datosLlamada) ~?= "[\"extensions\": [\"originationdn\": \"3584622309\", [\"no_answer_action\": \"notready\", [ ]]], [\"ani\": \"3584622309\", [\"dnis\": \"1665\", [\"userdata\": [\"customersegment\": \"default\", [\"ani\": \"3584622309\", [\"statusafterinbound\": \"Amarillo\", [ ]]]], [\"connid\": \"000202BA29A61AD6\", [ ]]]]]]"
   ]
 
-tests9 = test [
-   -- (serialize $ cadena 1 []) -- Idem problema de cadena vacia con tipos
-   (serialize $ cadena 1 [1]) ~?= "[1: 1, [ ]]",
-   (serialize $ cadena 1 ['1', '2', '3', '4']) ~?= "['1': ['2': ['3': ['4': 1, [ ]], [ ]], [ ]], [ ]]",
-
-   (serialize $ definir [2,3] 'c' cuatroNiveles) ~?= "[1: 'a', [2: [2: 'b', [3: 'c', [ ]]], [ ]]]",
-   (profundidad $ definir [4] 'g' $ definir [4] 'e' $ definir [2,4] 'f' $ definir [2,3,4,5] 'e' cuatroNiveles) ~?= 4
+ejercicio6 = test [
+  (serialize $ cadena 1 [1]) ~?= "[1: 1, [ ]]",
+  (serialize $ cadena 1 ['1', '2', '3', '4']) ~?= "['1': ['2': ['3': ['4': 1, [ ]], [ ]], [ ]], [ ]]",
+  (serialize $ definir [2,3] 'c' cuatroNiveles) ~?= "[1: 'a', [2: [2: 'b', [3: 'c', [ ]]], [ ]]]",
+  (profundidad $ definir [4] 'g' $ definir [4] 'e' $ definir [2,4] 'f' $ definir [2,3,4,5] 'e' cuatroNiveles) ~?= 4
   ]
 
-tests10 = test [
-   -- obtener [] Nil -- Idem no matchean tipos  
-   (obtener [4] $ definir [4] 'g' $ definir [4] 'e' $ definir [2,4] 'f' $ definir [2,3,4,5] 'e' cuatroNiveles) ~?= Just 'g',
-   obtener [2,3,3] cuatroNiveles ~?= Just 'c',
-   obtener [2,3,5] cuatroNiveles ~?= Nothing,
-   obtener [6,7] infinito ~?= Just 42
+ejercicio7 = test [
+  obtener [6,7] infinito        ~?= Just 42,
+  obtener [2,3,3] cuatroNiveles ~?= Just 'c',
+  obtener [2,3,5] cuatroNiveles ~?= Nothing,
+  (obtener [4] $ definir [4] 'g' $ definir [4] 'e' $ definir [2,4] 'f' $ definir [2,3,4,5] 'e' cuatroNiveles) ~?= Just 'g'
   ]
