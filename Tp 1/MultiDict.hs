@@ -83,7 +83,7 @@ lowerString = map toLower
 enLexicon :: [String] -> MultiDict String b -> MultiDict String b
 enLexicon xs md = filterMD (\x -> elem x xs) (mapMD lowerString id md)
 
-cadena :: Eq a => b ->  [a] -> MultiDict a b
+cadena :: Eq a => b -> [a] -> MultiDict a b
 cadena param xs = foldr (\x rec-> case rec of
                                   Nil -> Entry x param Nil
                                   _ -> Multi x rec Nil) Nil xs
