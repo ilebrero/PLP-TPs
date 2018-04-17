@@ -16,9 +16,6 @@ cuatroNiveles = Entry 1 'a' (Multi 2 (Entry 2 'b' (Multi 3 (Entry 3 'c' (Multi 4
 superinfinito :: MultiDict Integer Integer
 superinfinito = Multi 1 (Entry 1 1 superinfinito) (mapMD (+1) (*2) superinfinito)
 
-p1 = (Entry 'a' 1 (Entry 'b' 2 Nil))
-p2 = Multi 'b' (Entry 'a' 1 (Entry 'c' 2 Nil)) (Multi 'b' (Entry 'a' 1 (Multi 'c' (Entry 'd' 2 Nil) Nil)) Nil)
-
 datosLlamada :: MultiDict String String --Cualquier parecido con los datos de una llamada que hizo un cliente a un banco son absolutamente...
 datosLlamada = 
     Entry "EventSequenceNumber" "21866615" $

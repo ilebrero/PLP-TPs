@@ -33,5 +33,3 @@ main = hspec $ do
             obtener [1, 2, 3, 4] (definir [1, 2, 3, 4] 'e' Nil)  `shouldBe` (Just 'e')
         it "Obtener de una rama no valida devuelve nada" $ do
             obtener [1, 2, 3, 4, 5] (definir [1, 2, 3, 4] 'e' Nil)  `shouldBe` Nothing
-
- 
