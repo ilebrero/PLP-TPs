@@ -56,7 +56,7 @@ diferencia(C, E1, E2) :- match(C,E1), not(match(C,E2)).
 
 % Ejercicio 7: prefijoMaximo(?Prefijo, +Cadena, +RegEx)
 
-prefijoMaximo(_, _, _) :- fail.
+prefijoMaximo(P, C, E) :- prefix(P,C), generar(E,P,L). %esto devuelve todas las soluciones, hay que quedarse con el maximo.
 
 % Ejercicio 8: reemplazar(+X, +R, +E, Res)
 
