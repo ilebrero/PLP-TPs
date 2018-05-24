@@ -42,7 +42,7 @@ generar(empty,[],0).
 generar(E,X,1) :- symbol(E), append([],[E],X).
 generar(or(E1,E2), X, L) :- generar(E1,X,L), length(X,L); generar(E2,X,L), length(X,L).
 generar(star(E1),X,L) :- length(X,L), (generar(empty,X,L); generar(concat(E1,star(E1)),X,L)).
-generar(concat(E1,E2),X,L) :- length(X,L), append(X2,X1,X), length(X1,L1),length(X2,L2), generar(E1,X1,L1), generar(E2,X2,L2).
+generar(concat(E1,E2),X,L) :- length(X,L), append(X2,X1,X), length(X1,L1), length(X2,L2), generar(E1,X1,L1), generar(E2,X2,L2).
 
 
 match_inst(C, E) :- length(C,L), generar(E,C,L).
@@ -56,7 +56,11 @@ diferencia(C, E1, E2) :- match(C,E1), not(match(C,E2)).
 
 % Ejercicio 7: prefijoMaximo(?Prefijo, +Cadena, +RegEx)
 
-prefijoMaximo(P, C, E) :- prefix(P,C), generar(E,P,L). %esto devuelve todas las soluciones, hay que quedarse con el maximo.
+prefijoMaximo(P, C, E) :- esPrefijoValido(P,C,E), not(hayMasGrandes(P,C,E)). 
+
+esPrefijoValido(P,C,E) :- prefix(P,C), generar(E,P,L).
+
+hayMasGrandes(P,C,E) :- esPrefijoValido(P2,C,E), P\=P2, length(P,L), length(P2,L2), L2> L.
 
 % Ejercicio 8: reemplazar(+X, +R, +E, Res)
 
