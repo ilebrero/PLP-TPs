@@ -38,17 +38,17 @@ cadena(L) :- length(L, _), esCadena(L).
 
 % Ejercicio 4: match_inst(+Cadena, +RegEx)
 
-generar(empty,[],0).
-generar(E,X,1) :- symbol(E), append([],[E],X).
-generar(or(E1,E2), X, L) :- generar(E1,X,L), length(X,L); generar(E2,X,L), length(X,L).
-generar(star(E1),X,L) :- length(X,L), (generar(empty,X,L); generar(concat(E1,star(E1)),X,L)).
-generar(concat(E1,E2),X,L) :- length(X,L), append(X2,X1,X), length(X1,L1), length(X2,L2), generar(E1,X1,L1), generar(E2,X2,L2).
-
-
-match_inst(C, E) :- length(C,L), generar(E,C,L).
-
+match_inst([X],E) :- symbol(X), symbol(E), X=E.
+match_inst([],empty).
+match_inst(C,or(E1,E2)) :- match_inst(C, E1); match_inst(C,E2).
+match_inst(C, concat(E1,E2)) :- length(C,L), append(C1,C2,C), match_inst(C1,E1), match_inst(C2,E2).
+match_inst([], star(E)).
+match_inst([C|Cs], star(E)) :- match_inst([C],E), match_inst(Cs,star(E)).
 % Ejercicio 5: match(?Cadena, +RegEx)
-match(C, E) :- generar(E,C,L).
+
+match(C,empty):- C = [].
+match(C, E) :- not(tieneEstrella(E)), longitudMaxima(E,M), between(0,M,L), length(C,L), match_inst(C,E).
+match(C,E) :- tieneEstrella(E), length(C,L), match_inst(C,E).
 
 % Ejercicio 6: diferencia(?Cadena, +RegEx, +RegEx)
 
@@ -58,9 +58,14 @@ diferencia(C, E1, E2) :- match(C,E1), not(match(C,E2)).
 
 prefijoMaximo(P, C, E) :- esPrefijoValido(P,C,E), not(hayMasGrandes(P,C,E)). 
 
-esPrefijoValido(P,C,E) :- prefix(P,C), generar(E,P,L).
+esPrefijoValido(P,C,E) :- prefix(P,C), match_inst(P,E).
 
 hayMasGrandes(P,C,E) :- esPrefijoValido(P2,C,E), P\=P2, length(P,L), length(P2,L2), L2> L.
+
+/*prefijoMaximo(P,C,E) :- prefix(P,C), not(hayMasGrandes(P,C,E)).
+hayMasGrandes(P,C,E) :- prefix(P2,C), P\=P2, length(P,L), length(P2,L2), L2> L.*/
+
+
 
 % Ejercicio 8: reemplazar(+X, +R, +E, Res)
 
