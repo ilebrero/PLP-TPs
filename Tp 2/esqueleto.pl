@@ -44,11 +44,12 @@ match_inst(C,or(E1,E2)) :- match_inst(C, E1); match_inst(C,E2).
 match_inst(C, concat(E1,E2)) :- length(C,L), append(C1,C2,C), match_inst(C1,E1), match_inst(C2,E2).
 match_inst([], star(E)).
 match_inst([C|Cs], star(E)) :- match_inst([C],E), match_inst(Cs,star(E)).
+
 % Ejercicio 5: match(?Cadena, +RegEx)
 
-match(C,empty):- C = [].
+match(C, empty):- C = [].
 match(C, E) :- not(tieneEstrella(E)), longitudMaxima(E,M), between(0,M,L), length(C,L), match_inst(C,E).
-match(C,E) :- tieneEstrella(E), length(C,L), match_inst(C,E).
+match(C, E) :- tieneEstrella(E), length(C,L), match_inst(C,E).
 
 % Ejercicio 6: diferencia(?Cadena, +RegEx, +RegEx)
 
@@ -56,7 +57,7 @@ diferencia(C, E1, E2) :- match(C,E1), not(match(C,E2)).
 
 % Ejercicio 7: prefijoMaximo(?Prefijo, +Cadena, +RegEx)
 
-prefijoMaximo(P, C, E) :- esPrefijoValido(P,C,E), not(hayMasGrandes(P,C,E)). 
+prefijoMaximo(P, C, E) :- esPrefijoValido(P,C,E), not(hayMasGrandes(P,C,E)).
 
 esPrefijoValido(P,C,E) :- prefix(P,C), match_inst(P,E).
 
@@ -65,8 +66,16 @@ hayMasGrandes(P,C,E) :- esPrefijoValido(P2,C,E), P\=P2, length(P,L), length(P2,L
 /*prefijoMaximo(P,C,E) :- prefix(P,C), not(hayMasGrandes(P,C,E)).
 hayMasGrandes(P,C,E) :- prefix(P2,C), P\=P2, length(P,L), length(P2,L2), L2> L.*/
 
+% Ejercicio 8: reemplazar(+X, +R, +E, -Res)
+% Remover hasta(+Cadena, +itemsARemover, -Res)
 
+removerHasta(C, [], C).
+removerHasta([C|Cs], [T|Ts], Res) :- C == T, removerHasta(Cs, Ts, Res).
 
-% Ejercicio 8: reemplazar(+X, +R, +E, Res)
+reemplazar([], R, T, []).
 
-reemplazar(_, _, _, _) :- fail.
+reemplazar(C, R, T, Res) :- not(match([], R)), prefijoMaximo(Pref, C, R), removerHasta(C, Pref, ProxC), reemplazar(ProxC, R, T, Res1), append(T, Res1, Res).
+reemplazar(C, R, T, Res) :- match([], R), prefijoMaximo(Pref, C, R), Pref \= [], removerHasta(C, Pref, ProxC), reemplazar(ProxC, R, T, Res1), append(T, Res1, Res).
+	
+reemplazar([C|Cs], R, E, Res) :- not(match([], R)), not(prefijoMaximo(Pref, [C|Cs], R)), reemplazar(Cs, R, E, Res1), append([C], Res1, Res).
+reemplazar([C|Cs], R, E, Res) :- match([], R), prefijoMaximo(Pref, [C|Cs], R), Pref == [], reemplazar(Cs, R, E, Res1), append([C], Res1, Res).
