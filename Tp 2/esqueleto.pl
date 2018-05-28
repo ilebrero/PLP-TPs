@@ -69,13 +69,13 @@ hayMasGrandes(P,C,E) :- prefix(P2,C), P\=P2, length(P,L), length(P2,L2), L2> L.*
 % Ejercicio 8: reemplazar(+X, +R, +E, -Res)
 % Remover hasta(+Cadena, +itemsARemover, -Res)
 
+% Solo nos interesa que sea true si el prefijo no es vacio 
+prefijoMaximo2(P, C, E) :- prefijoMaximo(P, C, E), P \= [].
+
+% Se remueven los elementos a consumir si son reemplazables
 removerHasta(C, [], C).
 removerHasta([C|Cs], [T|Ts], Res) :- C == T, removerHasta(Cs, Ts, Res).
 
 reemplazar([], R, T, []).
-
-reemplazar(C, R, T, Res) :- not(match([], R)), prefijoMaximo(Pref, C, R), removerHasta(C, Pref, ProxC), reemplazar(ProxC, R, T, Res1), append(T, Res1, Res).
-reemplazar(C, R, T, Res) :- match([], R), prefijoMaximo(Pref, C, R), Pref \= [], removerHasta(C, Pref, ProxC), reemplazar(ProxC, R, T, Res1), append(T, Res1, Res).
-	
-reemplazar([C|Cs], R, E, Res) :- not(match([], R)), not(prefijoMaximo(Pref, [C|Cs], R)), reemplazar(Cs, R, E, Res1), append([C], Res1, Res).
-reemplazar([C|Cs], R, E, Res) :- match([], R), prefijoMaximo(Pref, [C|Cs], R), Pref == [], reemplazar(Cs, R, E, Res1), append([C], Res1, Res).
+reemplazar(C, R, T, Res) :- prefijoMaximo2(Pref, C, R), removerHasta(C, Pref, ProxC), reemplazar(ProxC, R, T, Res1), append(T, Res1, Res).
+reemplazar([C|Cs], R, E, Res) :- not(prefijoMaximo2(Pref, [C|Cs], R)), reemplazar(Cs, R, E, Res1), append([C], Res1, Res).
