@@ -67,7 +67,6 @@ hayMasGrandes(P,C,E) :- esPrefijoValido(P2,C,E), P\=P2, length(P,L), length(P2,L
 hayMasGrandes(P,C,E) :- prefix(P2,C), P\=P2, length(P,L), length(P2,L2), L2> L.*/
 
 % Ejercicio 8: reemplazar(+X, +R, +E, -Res)
-% Remover hasta(+Cadena, +itemsARemover, -Res)
 
 % Solo nos interesa que sea true si el prefijo no es vacio 
 prefijoMaximo2(P, C, E) :- prefijoMaximo(P, C, E), P \= [].
