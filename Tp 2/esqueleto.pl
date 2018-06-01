@@ -78,3 +78,33 @@ removerHasta([C|Cs], [T|Ts], Res) :- C == T, removerHasta(Cs, Ts, Res).
 reemplazar([], R, T, []).
 reemplazar(C, R, T, Res) :- prefijoMaximo2(Pref, C, R), removerHasta(C, Pref, ProxC), reemplazar(ProxC, R, T, Res1), append(T, Res1, Res).
 reemplazar([C|Cs], R, E, Res) :- not(prefijoMaximo2(Pref, [C|Cs], R)), reemplazar(Cs, R, E, Res1), append([C], Res1, Res).
+
+%%%%%%%%%
+% Tests %
+%%%%%%%%%
+
+begin_tests(TP2).
+use_module(library(plunit)).
+
+% Ejercicio 1
+
+test(tieneEstrella) :- tieneEstrella(or(a, concat(b, star(a)))).
+test(tieneEstrella) :- not(tieneEstrella(concat(or(a, b), or(b, a)))).
+
+% Ejercicio 2
+
+test(longitudMaxima, [true(N =:= 1)]) :- longitudMaxima(a, N).
+test(longitudMaxima, [true(N =:= 3)]) :- longitudMaxima(concat(a, concat(b, or(a, b))), N). 
+test(longitudMaxima, [true(N =:= 1)]) :- longitudMaxima(or(a, b), N). 
+test(longitudMaxima) :- not( longitudMaxima(concat(star(a), or(a, b)), N) ).
+
+test(iesimo, [true(X =:= 1)]) :- iesimo(0, [1, 2, 3], X).
+test(iesimo, [true(X =:= 3)]) :- iesimo(2, [1, 2, 3], X).
+test(iesimo) :- not( iesimo(4, [], X) ).
+
+% Ejercicio 3
+
+test(esCadena) :- esCadena([a, b, b, b, a]).
+test(esCadena) :- not( esCadena([1, a, b, b, a, a, a]) ).
+
+end_tests(TP2).
