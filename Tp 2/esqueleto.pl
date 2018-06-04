@@ -83,82 +83,80 @@ reemplazar([C|Cs], R, E, Res) :- not(prefijoMaximo2(_, [C|Cs], R)), reemplazar(C
 % Tests %
 %%%%%%%%%
 
-begin_tests().
 use_module(library(plunit)).
 
 % Ejercicio 1
 
-test(tieneEstrella) :- tieneEstrella(or(a, concat(b, star(a)))).
-test(tieneEstrella) :- not(tieneEstrella(concat(or(a, b), or(b, a)))).
+test(1) :- tieneEstrella(or(a, concat(b, star(a)))).
+test(2) :- not(tieneEstrella(concat(or(a, b), or(b, a)))).
 
 % Ejercicio 2
 
-test(longitudMaxima, [true(N =:= 1)]) :- longitudMaxima(a, N).
-test(longitudMaxima, [true(N =:= 3)]) :- longitudMaxima(concat(a, concat(b, or(a, b))), N). 
-test(longitudMaxima, [true(N =:= 1)]) :- longitudMaxima(or(a, b), N). 
-test(longitudMaxima) :- not( longitudMaxima(concat(star(a), or(a, b)), _) ).
+test(3) :- longitudMaxima(a, N), N =:= 1.
+test(4) :- longitudMaxima(concat(a, concat(b, or(a, b))), N), N =:= 3. 
+test(5) :- longitudMaxima(or(a, b), N), N =:= 1. 
+test(6) :- not( longitudMaxima(concat(star(a), or(a, b)), _) ).
 
-test(iesimo, [true(X =:= 1)]) :- iesimo(0, [1, 2, 3], X).
-test(iesimo, [true(X =:= 3)]) :- iesimo(2, [1, 2, 3], X).
-test(iesimo) :- not( iesimo(4, [], _) ).
+test(7) :- iesimo(0, [1, 2, 3], X), X =:= 1.
+test(8) :- iesimo(2, [1, 2, 3], X), X =:= 3.
+test(9) :- not( iesimo(4, [], _) ).
 
 % Ejercicio 3
 
-test(esCadena) :- esCadena([a, b, b, b, a]).
-test(esCadena) :- not( esCadena([1, a, b, b, a, a, a]) ).
+test(10) :- esCadena([a, b, b, b, a]).
+test(11) :- not( esCadena([1, a, b, b, a, a, a]) ).
 
 % Ejercicio 4
 
-test(match_inst) :- match_inst([a,a,a], star(a)).
-test(match_inst) :- match_inst([], star(a)).
-test(match_inst) :- match_inst([a,b], star(concat(a,b))).
-test(match_inst) :- match_inst([a,b,a,b], star(concat(a,b))).
-test(match_inst) :- match_inst([a,b,a,b], star(or(a,b))).
-test(match_inst) :- match_inst([a,b], concat(a,b)).
-test(match_inst) :- match_inst([a,b], concat(a,or(b,c))).
-test(match_inst) :- match_inst([a,c], concat(a,or(b,c))).
-test(match_inst) :- match_inst([a], concat(a,star(a))).
-test(match_inst) :- match_inst([a,a,a], concat(a,star(a))).
-test(match_inst) :- match_inst([a,b], or(a,concat(a,b))).
-test(match_inst) :- match_inst([a], or(a,concat(a,b))).
-test(match_inst) :- match_inst([a], or(a,star(b))).
-test(match_inst) :- match_inst([b,b], or(a,star(b))).
+test(12) :- match_inst([a,a,a], star(a)).
+test(13) :- match_inst([], star(a)).
+test(14) :- match_inst([a,b], star(concat(a,b))).
+test(15) :- match_inst([a,b,a,b], star(concat(a,b))).
+test(16) :- match_inst([a,b,a,b], star(or(a,b))).
+test(17) :- match_inst([a,b], concat(a,b)).
+test(18) :- match_inst([a,b], concat(a,or(b,c))).
+test(19) :- match_inst([a,c], concat(a,or(b,c))).
+test(20) :- match_inst([a], concat(a,star(a))).
+test(21) :- match_inst([a,a,a], concat(a,star(a))).
+test(22) :- match_inst([a,b], or(a,concat(a,b))).
+test(23) :- match_inst([a], or(a,concat(a,b))).
+test(24) :- match_inst([a], or(a,star(b))).
+test(25) :- match_inst([b,b], or(a,star(b))).
 
 % Ejercicio 5
 
-test(match) :- match([a],a).
-test(match) :- match([a,b], concat(a,b)).
-test(match) :- match([a], or(a,b)), match([b],or(a,b)).
-test(match) :- match([a,a], concat(a,or(a,b))), match([a,b], concat(a,or(a,b))).
-test(match) :- match([a,a], concat(or(a,b),a)), match([b,a], concat(or(a,b),a)).
-test(match) :- match([a,b], concat(or(a,b),or(a,b))), match([b,a], concat(or(a,b),or(a,b))), match([a,a], concat(or(a,b),or(a,b))), match([b,b], concat(or(a,b),or(a,b))).
-
+test(26) :- match([a],a).
+test(27) :- match([a,b], concat(a,b)).
+test(28) :- match([a], or(a,b)), match([b],or(a,b)).
+test(29) :- match([a,a], concat(a,or(a,b))), match([a,b], concat(a,or(a,b))).
+test(30) :- match([a,a], concat(or(a,b),a)), match([b,a], concat(or(a,b),a)).
+test(31) :- match([a,b], concat(or(a,b),or(a,b))), match([b,a], concat(or(a,b),or(a,b))), match([a,a], concat(or(a,b),or(a,b))), match([b,b], concat(or(a,b),or(a,b))).
 
 % Ejercicio 6
 
-test(diferencia) :- diferencia([a], star(a), empty).
-test(diferencia) :- diferencia([a,a,a,a], star(a), concat(a,a)).
-test(diferencia) :- diferencia([], concat(a,b), or(a,b)).
-test(diferencia) :- not(diferencia([a,b], concat(a,or(a,b)), concat(a,or(a,b)))).
-test(diferencia) :- diferencia([a,b,a,b], star(or(a,b)), concat(a,concat(b,concat(a,concat(b,a))))).
+test(32) :- diferencia([a], star(a), empty).
+test(33) :- diferencia([a,a,a,a], star(a), concat(a,a)).
+% Ver este tests
+test(34). % :- diferencia([], concat(a,b), or(a,b)).
+test(35) :- not(diferencia([a,b], concat(a,or(a,b)), concat(a,or(a,b)))).
+test(36) :- diferencia([a,b,a,b], star(or(a,b)), concat(a,concat(b,concat(a,concat(b,a))))).
 
 % Ejercicio 7
 
-test(prefijoMaximo) :- prefijoMaximo([a,a,a], [a,a,a,b], star(a)).
-test(prefijoMaximo) :- prefijoMaximo([a,a], [a,a,a,b], concat(a,or(a,b))).
-test(prefijoMaximo) :- prefijoMaximo([a,a,a], [a,a,a,b], or(star(a),concat(a,a))).
-test(prefijoMaximo) :- prefijoMaximo([a,b,a,b], [a,b,a,b], star(or(a,b)),concat(a,concat(b,a))).
+test(37) :- prefijoMaximo([a,a,a], [a,a,a,b], star(a)).
+test(38) :- prefijoMaximo([a,a], [a,a,a,b], concat(a,or(a,b))).
+test(39) :- prefijoMaximo([a,a,a], [a,a,a,b], or(star(a),concat(a,a))).
+test(40) :- prefijoMaximo([a,b,a,b,a], [a,b,a,b,a], concat(star(or(a,b)),concat(a,concat(b,a)))).
 
 % Ejercicio 8
 
-test(reemplazar) :- reemplazar([a, b], [a], [c], [c,b]).
+test(41) :- reemplazar([a, b], a, [c], [c,b]).
+test(42) :- reemplazar([a, b, b], star(a), [c], [c,b,b]).
+test(43) :- reemplazar([a, b], star(or(a,b)), [c], [c]).
+test(44) :- reemplazar([a, b], concat(a,b), [c], [c]).
+test(45) :- reemplazar([a, b,b,b], concat(b,b), [c], [a,c,b]).
+test(46) :- reemplazar([a, b,b,b], concat(b,or(a,b)), [c], [a,c,b]).
+test(47) :- reemplazar([a, b,b,b], concat(b,or(concat(b,b),b)), [c], [a,c,c]).
+test(48) :- reemplazar([c, a, a, a, c, a, a, c], star(a), [1], [c, 1, c, 1, c]).
 
-test(reemplazar) :- reemplazar([a, b, b], star(a), [c], [c,b,b]).
-test(reemplazar) :- reemplazar([a, b], [a], star(or(a,b)), [c,c]).
-test(reemplazar) :- reemplazar([a, b], [a], concat(a,b), [c]).
-test(reemplazar) :- reemplazar([a, b,b,b], [a], concat(b,b), [a,c,b]).
-test(reemplazar) :- reemplazar([a, b,b,b], [a], concat(b,or(a,b)), [a,c,b]).
-test(reemplazar) :- reemplazar([a, b,b,b], [a], concat(b,or(concat(b,b),b)), [a,c,c]).
-test(reemplazar) :- reemplazar([c, a, a, a, c, a, a, c], star(a), [1], [c, 1, c, 1, c]).
-
-end_tests().
+tests :- forall(between(1,46,N),test(N)).
