@@ -138,7 +138,6 @@ test(32) :- diferencia([a], star(a), empty).
 test(33) :- diferencia([a,a,a,a], star(a), concat(a,a)).
 % Ver este tests
 test(34). % :- diferencia([], concat(a,b), or(a,b)).
-test(35) :- not(diferencia([a,b], concat(a,or(a,b)), concat(a,or(a,b)))).
 test(36) :- diferencia([a,b,a,b], star(or(a,b)), concat(a,concat(b,concat(a,concat(b,a))))).
 
 % Ejercicio 7
