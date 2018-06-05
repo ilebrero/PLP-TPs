@@ -155,7 +155,7 @@ test(42) :- reemplazar([a, b], star(or(a,b)), [c], [c]).
 test(43) :- reemplazar([a, b], concat(a,b), [c], [c]).
 test(44) :- reemplazar([a, b,b,b], concat(b,b), [c], [a,c,b]).
 test(45) :- reemplazar([a, b,b,b], concat(b,or(a,b)), [c], [a,c,b]).
-test(46) :- reemplazar([a, b,b,b], concat(b,or(concat(b,b),b)), [c], [a,c,c]).
+test(46) :- reemplazar([a, b,b,b], concat(b,or(concat(b,b),b)), [c], [a,c]).
 test(47) :- reemplazar([c, a, a, a, c, a, a, c], star(a), [1], [c, 1, c, 1, c]).
 
 tests :- forall(between(1,47,N),test(N)).
