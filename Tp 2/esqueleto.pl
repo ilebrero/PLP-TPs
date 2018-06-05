@@ -138,24 +138,24 @@ test(32) :- diferencia([a], star(a), empty).
 test(33) :- diferencia([a,a,a,a], star(a), concat(a,a)).
 % Ver este tests
 test(34). % :- diferencia([], concat(a,b), or(a,b)).
-test(36) :- diferencia([a,b,a,b], star(or(a,b)), concat(a,concat(b,concat(a,concat(b,a))))).
+test(35) :- diferencia([a,b,a,b], star(or(a,b)), concat(a,concat(b,concat(a,concat(b,a))))).
 
 % Ejercicio 7
 
-test(37) :- prefijoMaximo([a,a,a], [a,a,a,b], star(a)).
-test(38) :- prefijoMaximo([a,a], [a,a,a,b], concat(a,or(a,b))).
-test(39) :- prefijoMaximo([a,a,a], [a,a,a,b], or(star(a),concat(a,a))).
-test(40) :- prefijoMaximo([a,b,a,b,a], [a,b,a,b,a], concat(star(or(a,b)),concat(a,concat(b,a)))).
+test(36) :- prefijoMaximo([a,a,a], [a,a,a,b], star(a)).
+test(37) :- prefijoMaximo([a,a], [a,a,a,b], concat(a,or(a,b))).
+test(38) :- prefijoMaximo([a,a,a], [a,a,a,b], or(star(a),concat(a,a))).
+test(39) :- prefijoMaximo([a,b,a,b,a], [a,b,a,b,a], concat(star(or(a,b)),concat(a,concat(b,a)))).
 
 % Ejercicio 8
 
-test(41) :- reemplazar([a, b], a, [c], [c,b]).
-test(42) :- reemplazar([a, b, b], star(a), [c], [c,b,b]).
-test(43) :- reemplazar([a, b], star(or(a,b)), [c], [c]).
-test(44) :- reemplazar([a, b], concat(a,b), [c], [c]).
-test(45) :- reemplazar([a, b,b,b], concat(b,b), [c], [a,c,b]).
-test(46) :- reemplazar([a, b,b,b], concat(b,or(a,b)), [c], [a,c,b]).
-test(47) :- reemplazar([a, b,b,b], concat(b,or(concat(b,b),b)), [c], [a,c,c]).
-test(48) :- reemplazar([c, a, a, a, c, a, a, c], star(a), [1], [c, 1, c, 1, c]).
+test(40) :- reemplazar([a, b], a, [c], [c,b]).
+test(41) :- reemplazar([a, b, b], star(a), [c], [c,b,b]).
+test(42) :- reemplazar([a, b], star(or(a,b)), [c], [c]).
+test(43) :- reemplazar([a, b], concat(a,b), [c], [c]).
+test(44) :- reemplazar([a, b,b,b], concat(b,b), [c], [a,c,b]).
+test(45) :- reemplazar([a, b,b,b], concat(b,or(a,b)), [c], [a,c,b]).
+test(46) :- reemplazar([a, b,b,b], concat(b,or(concat(b,b),b)), [c], [a,c,c]).
+test(47) :- reemplazar([c, a, a, a, c, a, a, c], star(a), [1], [c, 1, c, 1, c]).
 
-tests :- forall(between(1,46,N),test(N)).
+tests :- forall(between(1,47,N),test(N)).
