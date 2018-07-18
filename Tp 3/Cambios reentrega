@@ -1,0 +1,32 @@
+- Clases:
+	Se crea "StringSplitter". Se encarga de generar todas las posibles particiones en dos de un string. 
+
+	EJ: "abcde" ->
+	 	StringSplitter new: "abcde"
+	 		left: ""
+	 		right: "abcde"
+ 		generateNextPartition.
+ 			left: "a"
+	 		right: "bcde"
+ 		generateNextPartition.
+ 			left: "ab"
+	 		right: "cde"
+	 		.
+	 		.
+	 		.
+
+- DoesNotUnderstand: Se chequea que la expression que se quiere agregar al Regex tenga largo 1. Caso contrario se eleva la llamada al mensaje del padre.
+
+- Match:
+	- CONCAT: Se remueve el "whileTrue" y, se adapta para usar StringSplitter y no repetir codigo.
+
+	- OR: Se deja de usar "printString", en su lugar se llama a los match de las subexpresiones.
+
+	- STAR: 
+		Usando StringSplitter se checkea que:
+			Para toda particion de la cadena que se quiere matchear:
+				- El lado izquierdo matchea con la expression adentro del star.
+				- El lado derecho matchee con star.
+					De esta manera se puede pensar en "recursivo" que se matchea el string de a partes contra star.
+
+			Luego, si alguna particion matchea a ambos lados -> star matchea.
